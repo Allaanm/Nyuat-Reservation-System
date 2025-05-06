@@ -1,0 +1,12 @@
+{
+  "name": "hotel-management-php",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch-sass": "node-sass --watch public/scss -o public/css/ -r",
+    "dev": "live-server --open=public/",
+    "start": "concurrently \"npm run watch-sass\" \"npm run dev\""
+  }
+  
+}
