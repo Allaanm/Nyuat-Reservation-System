@@ -1,12 +1,17 @@
 {
   "name": "hotel-management-php",
   "version": "1.0.0",
-  "description": "",
+  "description": "Hotel management frontend with live server and Sass",
+  "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch-sass": "node-sass --watch public/scss -o public/css/ -r",
     "dev": "live-server --open=public/",
     "start": "concurrently \"npm run watch-sass\" \"npm run dev\""
+  },
+  "dependencies": {
+    "concurrently": "^7.0.0",
+    "node-sass": "^9.0.0",
+    "live-server": "^1.2.2"
   }
-  
 }
