@@ -144,3 +144,66 @@ CREATE TABLE `payment`(
   CONSTRAINT `payment_idfk_2` FOREIGN KEY(`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE
 )
 
+
+-- users table
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_email` varchar(50) NOT NULL,
+  `user_fname` varchar(20) NOT NULL,
+  `user_lname` varchar(20) NOT NULL,
+  `user_verified` int(1) NOT NULL DEFAULT 0,
+  `verification_hash` varchar(500) NOT NULL,
+  `user_dob` date NOT NULL,
+  `user_phone` varchar(15) NOT NULL,
+  `user_admin` int(1) NOT NULL DEFAULT 0,
+  `user_password` varchar(500) NOT NULL,
+  `user_created` timestamp NOT NULL DEFAULT current_timestamp(),
+  `user_image` varchar(20) NOT NULL DEFAULT 'default_user.jpg',
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- rooms table
+CREATE TABLE `rooms` (
+  `room_id` int(11) NOT NULL AUTO_INCREMENT,
+  `room_number` int(11) NOT NULL,
+  `room_name` varchar(30) NOT NULL,
+  `room_type` varchar(30) NOT NULL,
+  `room_price` double(10,3) NOT NULL,
+  `room_booked` int(1) DEFAULT 0,
+  `check_in_date` date DEFAULT NULL,
+  `check_out_date` date DEFAULT NULL,
+  `room_image` varchar(50) NOT NULL,
+  `room_floor` int(11) NOT NULL,
+  `room_beds` int(11) NOT NULL,
+  `bed_type` varchar(30) NOT NULL,
+  `room_capacity` int(11) NOT NULL,
+  `room_amenities` varchar(200) NOT NULL,
+  PRIMARY KEY (`room_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- reservations table (AFTER users and rooms exist)
+CREATE TABLE `reservations` (
+  `reservation_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `room_id` int(11) DEFAULT NULL,
+  `booking_date` date DEFAULT NULL,
+  `no_adults` int(11) DEFAULT NULL,
+  `no_children` int(11) DEFAULT NULL,
+  `reservation_created` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`reservation_id`),
+  KEY `user_id` (`user_id`),
+  KEY `room_id` (`room_id`),
+  CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- payment table (AFTER reservations and users exist)
+CREATE TABLE `payment` (
+  `payment_id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `reservation_id` int(11) NOT NULL,
+  `method` varchar(10) DEFAULT 'card',
+  `amount` int(11),
+  CONSTRAINT `payment_idfk_1` FOREIGN KEY (`reservation_id`) REFERENCES `reservations` (`reservation_id`) ON DELETE CASCADE,
+  CONSTRAINT `payment_idfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
